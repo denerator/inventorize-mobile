@@ -17,9 +17,9 @@ export const Intro = (props: NavigationInjectedProps) => {
       <View style={styles.container}>
         <Image style={styles.image} source={IMAGES.introImage} />
         <View>
-          <Text style={styles.title}>INVETORIZE</Text>
+          <Text style={styles.title}>INVENTORIZE</Text>
           <View style={styles.descriptionContainer}>
-            <Text style={styles.title}>Easily track your inventory</Text>
+            <Text style={styles.subTitle}>Easily track your inventory</Text>
           </View>
         </View>
         <View>
@@ -42,7 +42,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fefdfc',
-    fontSize: 50,
+    fontSize: 48,
+    fontWeight: '700',
+    marginBottom: 36,
+  },
+  subTitle: {
+    color: '#fefdfc',
+    fontSize: 40,
     fontWeight: '700',
     marginBottom: 36,
   },

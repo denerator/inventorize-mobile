@@ -2,8 +2,8 @@ import * as React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { BarcodeScreen } from '../barcode/barcode';
 import { ROUTES } from '../../constants';
-import { ItemInfo } from '../item-info/item.info';
 import { Dashboard } from '../dashboard';
+import { EditItemScreen } from '../item-edit';
 
 export const AdminNavigation = createStackNavigator(
   {
@@ -25,7 +25,7 @@ export const AdminNavigation = createStackNavigator(
       },
     },
     [ROUTES.ItemEdit]: {
-      screen: ItemInfo, // TODO: replace with edit screen
+      screen: EditItemScreen,
       navigationOptions: {
         header: null,
         headerBackTitle: null,

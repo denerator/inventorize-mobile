@@ -16,6 +16,11 @@ export const Dashboard = (props: NavigationInjectedProps) => {
     // await storageService.clearUser();
     props.navigation.navigate(ROUTES.Intro);
   };
+
+  const onAdd = () => {
+    props.navigation.navigate(ROUTES.AdminBarcode);
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeView}>
       <View style={styles.headerContainer}>
@@ -44,6 +49,9 @@ export const Dashboard = (props: NavigationInjectedProps) => {
           <Text style={styles.itemLabel}>Chair</Text>
         </View>
       </ScrollView>
+      <TouchableOpacity onPress={onAdd} style={styles.addBtn}>
+        <Text style={styles.plusBtn}>+</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -67,7 +75,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   list: {
-    flex: 1,
     paddingHorizontal: '12%',
     paddingVertical: 15,
   },
@@ -88,5 +95,20 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 19,
     fontWeight: 'bold',
+  },
+  addBtn: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: COLORS.barcodeCancelBtn,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 90,
+    right: 50,
+  },
+  plusBtn: {
+    fontSize: 50,
+    color: COLORS.mainBg,
   },
 });

@@ -18,7 +18,6 @@ import { NavigationInjectedProps } from 'react-navigation';
 
 export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const isAdmin = props.navigation.getParam('isAdmin');
-  console.log(isAdmin, 'isAdmin flag param');
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -31,7 +30,9 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
       setIsLoading(true);
       // const resp = await barcodeService.registerKit(barcode);
       setIsLoading(false);
-      props.navigation.navigate(ROUTES.ItemInfo);
+      props.navigation.navigate(isAdmin ? ROUTES.ItemEdit : ROUTES.ItemInfo, {
+        code: '123123131', //TODO: replace with scanned code
+      });
     } catch (err) {
       setIsLoading(false);
       Alert.alert('Something went wrong. Try again later');
