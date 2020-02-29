@@ -3,7 +3,7 @@ import { tokenService } from './token.service';
 
 export abstract class ApiService {
   apiInstance = axios.create({
-    baseURL: 'localhost:3000',
+    baseURL: 'http://localhost:3000',
   });
 
   protected post = (url: string, body: {}) => {

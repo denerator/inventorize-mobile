@@ -5,15 +5,6 @@ class StorageService {
     return await this.saveToStorage('user', JSON.stringify(user));
   }
 
-  public async isNewUser() {
-    const isNew = await AsyncStorage.getItem('isNewUser');
-    return !isNew;
-  }
-
-  public async setNewUser() {
-    return await this.saveToStorage('isNewUser', '1');
-  }
-
   public getUser = async () => {
     const user = await AsyncStorage.getItem('user');
     return user ? JSON.parse(user) : null;
@@ -23,6 +14,7 @@ class StorageService {
     try {
       await AsyncStorage.setItem(key, value);
     } catch (error) {
+      console.log(error, 'ERROR_SAVING_TO_STORAGE');
     }
   }
 
@@ -33,14 +25,6 @@ class StorageService {
       console.log(err);
     }
   }
-
-  public isDocumentsRead = async () => {
-    return await AsyncStorage.getItem('isDocsRead');
-  };
-
-  public setDocsRead = async () => {
-    return await this.saveToStorage('isDocsRead', '1');
-  };
 }
 
 export const storageService = new StorageService();

@@ -10,8 +10,42 @@ import {
 } from 'react-native';
 import { globalStyles, IMAGES, ROUTES, COLORS } from '../../constants';
 import { storageService } from '../../services/storage.service';
+import { IInventoryItem } from '../../typings/inventory';
+
+const MOCKED_ITEMS: IInventoryItem[] = [
+  {
+    name: 'Chair',
+    price: 50,
+    amount: 4,
+    responsible: 'Mr. Barry Allen',
+    code: '1231231',
+  },
+  {
+    name: 'Chair',
+    price: 50,
+    amount: 4,
+    responsible: 'Mr. Barry Allen',
+    code: '1231231',
+  },
+  {
+    name: 'Chair',
+    price: 50,
+    amount: 4,
+    responsible: 'Mr. Barry Allen',
+    code: '1231231',
+  },
+];
 
 export const Dashboard = (props: NavigationInjectedProps) => {
+  const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
+
+  React.useEffect(() => {
+    const getInventory = async () => {
+      setInventory(MOCKED_ITEMS);
+    };
+    getInventory();
+  }, []);
+
   const logout = async () => {
     // await storageService.clearUser();
     props.navigation.navigate(ROUTES.Intro);
@@ -19,6 +53,10 @@ export const Dashboard = (props: NavigationInjectedProps) => {
 
   const onAdd = () => {
     props.navigation.navigate(ROUTES.AdminBarcode);
+  };
+
+  const onEdit = (item: IInventoryItem) => {
+    props.navigation.navigate(ROUTES.ItemEdit, { item });
   };
 
   return (
@@ -30,24 +68,18 @@ export const Dashboard = (props: NavigationInjectedProps) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.list}>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.itemLabel}>Chair</Text>
-        </View>
+        {inventory.map((item, index) => {
+          const onItemClick = () => {
+            onEdit(item);
+          };
+          return (
+            <TouchableOpacity onPress={onItemClick} key={index}>
+              <View style={styles.item}>
+                <Text style={styles.itemLabel}>{item.name}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
       <TouchableOpacity onPress={onAdd} style={styles.addBtn}>
         <Text style={styles.plusBtn}>+</Text>
@@ -82,7 +114,8 @@ const styles = StyleSheet.create({
     shadowColor: 'rgb(0, 0, 0)',
     shadowOffset: { width: 2, height: 0 },
     shadowRadius: 16,
-    backgroundColor: '#fff',
+    borderColor: '#fff',
+    borderWidth: 0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -92,7 +125,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
   },
   itemLabel: {
-    color: '#000',
+    color: COLORS.barcodeCancelBtn,
     fontSize: 19,
     fontWeight: 'bold',
   },

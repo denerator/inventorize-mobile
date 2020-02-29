@@ -13,17 +13,11 @@ import {
 } from 'react-native';
 import { globalStyles, COLORS, IMAGES, ROUTES } from '../../constants';
 import { CTA } from '../../components/cta';
-
-const inputState = {
-  name: '',
-  price: '',
-  amount: '',
-  responsible: '',
-};
+import { IInventoryItem } from '../../typings/inventory';
 
 export const EditItemScreen = (props: NavigationInjectedProps) => {
-  const code = props.navigation.getParam('code');
-  const [state, setState] = React.useState(inputState);
+  const item: IInventoryItem = props.navigation.getParam('item');
+  const [state, setState] = React.useState<IInventoryItem>(item);
   const goBack = () => {
     props.navigation.navigate(ROUTES.AdminBarcode);
   };
@@ -33,13 +27,13 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
   };
 
   const setPrice = (value: string) => {
-    setState({ ...state, price: value });
+    setState({ ...state, price: +value });
   };
 
   const setAmount = (value: string) => {
     setState({
       ...state,
-      amount: value,
+      amount: +value,
     });
   };
 
@@ -76,8 +70,9 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 <Text style={styles.label}>Code</Text>
                 <TextInput
                   placeholderTextColor="#5f5e5c"
-                  value={code}
+                  value={state.code}
                   style={styles.input}
+                  editable={false}
                 />
               </View>
               <View>
@@ -85,7 +80,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 <TextInput
                   placeholder="100$"
                   placeholderTextColor="#5f5e5c"
-                  value={state.price}
+                  value={state.price.toString()}
                   onChangeText={setPrice}
                   style={styles.input}
                 />
@@ -95,7 +90,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 <TextInput
                   placeholder="1"
                   placeholderTextColor="#5f5e5c"
-                  value={state.amount}
+                  value={state.amount.toString()}
                   onChangeText={setAmount}
                   style={styles.input}
                 />

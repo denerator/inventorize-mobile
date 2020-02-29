@@ -22,7 +22,11 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const onCancel = () => {
-    props.navigation.navigate(ROUTES.Intro);
+    if (isAdmin) {
+      props.navigation.goBack();
+    } else {
+      props.navigation.navigate(ROUTES.Intro);
+    }
   };
 
   const onWaitingNavigate = async (barcode: string) => {
@@ -31,7 +35,13 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
       // const resp = await barcodeService.registerKit(barcode);
       setIsLoading(false);
       props.navigation.navigate(isAdmin ? ROUTES.ItemEdit : ROUTES.ItemInfo, {
-        code: '123123131', //TODO: replace with scanned code
+        item: {
+          name: '',
+          amount: 1,
+          price: 0,
+          code: '123123131',
+          responsible: '',
+        },
       });
     } catch (err) {
       setIsLoading(false);
