@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavigationInjectedProps } from 'react-navigation';
+import { NavigationInjectedProps, ScrollView } from 'react-navigation';
 import {
   View,
   SafeAreaView,
@@ -10,16 +10,20 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
+  Alert,
 } from 'react-native';
 import { globalStyles, COLORS, IMAGES, ROUTES } from '../../constants';
 import { CTA } from '../../components/cta';
 import { IInventoryItem } from '../../typings/inventory';
+import { adminService } from '../admin/admin.service';
 
 export const EditItemScreen = (props: NavigationInjectedProps) => {
   const item: IInventoryItem = props.navigation.getParam('item');
+
   const [state, setState] = React.useState<IInventoryItem>(item);
+
   const goBack = () => {
-    props.navigation.navigate(ROUTES.AdminBarcode);
+    props.navigation.goBack();
   };
 
   const setName = (value: string) => {
@@ -41,13 +45,22 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
     setState({ ...state, responsible: value });
   };
 
-  const onSubmit = () => {
-    props.navigation.navigate(ROUTES.AdminDashboard);
+  const onSubmit = async () => {
+    try {
+      if (item.name) {
+        await adminService.updateItem(state);
+      } else {
+        await adminService.createItem(state);
+      }
+      props.navigation.navigate(ROUTES.AdminDashboard);
+    } catch (err) {
+      Alert.alert(err.response.data.message || 'Something went wrong');
+    }
   };
   return (
     <SafeAreaView style={globalStyles.safeView}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ScrollView>
           <View style={styles.headerContainer}>
             <TouchableOpacity onPress={goBack}>
               <Image style={styles.icon} source={IMAGES.backArrow} />
@@ -107,10 +120,10 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
               </View>
             </View>
             <View>
-              <CTA onPress={onSubmit} title="Submit" />
+              <CTA onPress={onSubmit} title={item.name ? 'Update' : 'Create'} />
             </View>
           </View>
-        </>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );

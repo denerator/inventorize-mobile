@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     color: '#5f5e5c',
     fontSize: 14,
     fontWeight: '700',
+    marginBottom: 8,
   },
   input: {
     shadowColor: 'rgba(0, 0, 0, 0.03)',

@@ -7,41 +7,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import { globalStyles, IMAGES, ROUTES, COLORS } from '../../constants';
 import { storageService } from '../../services/storage.service';
 import { IInventoryItem } from '../../typings/inventory';
-
-const MOCKED_ITEMS: IInventoryItem[] = [
-  {
-    name: 'Chair',
-    price: 50,
-    amount: 4,
-    responsible: 'Mr. Barry Allen',
-    code: '1231231',
-  },
-  {
-    name: 'Chair',
-    price: 50,
-    amount: 4,
-    responsible: 'Mr. Barry Allen',
-    code: '1231231',
-  },
-  {
-    name: 'Chair',
-    price: 50,
-    amount: 4,
-    responsible: 'Mr. Barry Allen',
-    code: '1231231',
-  },
-];
+import { adminService } from '../admin/admin.service';
 
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
 
   React.useEffect(() => {
     const getInventory = async () => {
-      setInventory(MOCKED_ITEMS);
+      try {
+        const response = await adminService.getAllItems();
+        setInventory(response.data);
+      } catch (err) {
+        console.log(err);
+        Alert.alert('Something went wrong. Try again later');
+      }
     };
     getInventory();
   }, []);

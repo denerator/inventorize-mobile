@@ -1,24 +1,32 @@
 import axios, { Method, AxiosRequestConfig } from 'axios';
 import { tokenService } from './token.service';
 
+interface IApiResponse<T> {
+  data: T;
+}
+
 export abstract class ApiService {
-  apiInstance = axios.create({
-    baseURL: 'http://localhost:3000',
+  private apiInstance = axios.create({
+    baseURL: 'https://inventorize.herokuapp.com',
   });
 
-  protected post = (url: string, body: {}) => {
-    return this.request(url, 'POST', body);
+  protected post = <T>(url: string, body: {}) => {
+    return this.request<T>(url, 'POST', body);
   };
 
-  protected put = (url: string, body: {}) => {
-    return this.request(url, 'PUT', body);
+  protected put = <T>(url: string, body: {}) => {
+    return this.request<T>(url, 'PUT', body);
   };
 
-  protected get = <T>(url: string): Promise<T> => {
+  protected get = <T>(url: string) => {
     return this.request<T>(url, 'GET');
   };
 
-  private request = <T>(url: string, method: Method, body?: {}): Promise<T> => {
+  private request = <T>(
+    url: string,
+    method: Method,
+    body?: {}
+  ): Promise<IApiResponse<T>> => {
     const config: AxiosRequestConfig = {
       url,
       method,

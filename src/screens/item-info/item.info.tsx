@@ -9,8 +9,26 @@ import {
   Image,
 } from 'react-native';
 import { globalStyles, COLORS, IMAGES } from '../../constants';
+import { userService } from '../user/user.service';
+import { IInventoryItem } from '../../typings/inventory';
 
 export const ItemInfo = (props: NavigationInjectedProps) => {
+  const item = props.navigation.getParam('item');
+
+  const [itemInfo, setInfo] = React.useState<IInventoryItem>(item);
+
+  React.useEffect(() => {
+    const getItemInfo = async () => {
+      try {
+        const response = await userService.getItemInfo(item.code);
+        setInfo(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getItemInfo();
+  }, []);
+
   const onGoBack = () => {
     props.navigation.goBack();
   };
@@ -23,23 +41,23 @@ export const ItemInfo = (props: NavigationInjectedProps) => {
         <Text style={styles.screenTitle}>Info</Text>
       </View>
       <View style={styles.container}>
-        <Text style={styles.title}>Chair</Text>
+        <Text style={styles.title}>{itemInfo.name}</Text>
         <View style={styles.formBlock}>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Item name</Text>
-            <Text style={styles.summaryValue}>Pupil chair</Text>
+            <Text style={styles.summaryValue}>{itemInfo.name}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Code</Text>
-            <Text style={styles.summaryValue}>23295298572</Text>
+            <Text style={styles.summaryValue}>{itemInfo.code}</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Item price</Text>
-            <Text style={styles.summaryValue}>100$</Text>
+            <Text style={styles.summaryValue}>{itemInfo.price}$</Text>
           </View>
           <View style={styles.summaryItem}>
             <Text style={styles.summaryLabel}>Amount</Text>
-            <Text style={styles.summaryValue}>3</Text>
+            <Text style={styles.summaryValue}>{itemInfo.amount}</Text>
           </View>
           <View
             style={StyleSheet.flatten([
@@ -48,7 +66,7 @@ export const ItemInfo = (props: NavigationInjectedProps) => {
             ])}
           >
             <Text style={styles.summaryLabel}>Responsible</Text>
-            <Text style={styles.summaryValue}>Head</Text>
+            <Text style={styles.summaryValue}>{itemInfo.responsible}</Text>
           </View>
         </View>
       </View>
