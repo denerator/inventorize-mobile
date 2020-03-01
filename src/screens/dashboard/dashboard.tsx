@@ -17,16 +17,17 @@ import { adminService } from '../admin/admin.service';
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
 
+  const getInventory = async () => {
+    try {
+      const response = await adminService.getAllItems();
+      setInventory(response.data);
+    } catch (err) {
+      console.log(err);
+      Alert.alert('Something went wrong. Try again later');
+    }
+  };
+
   React.useEffect(() => {
-    const getInventory = async () => {
-      try {
-        const response = await adminService.getAllItems();
-        setInventory(response.data);
-      } catch (err) {
-        console.log(err);
-        Alert.alert('Something went wrong. Try again later');
-      }
-    };
     getInventory();
   }, []);
 
@@ -39,8 +40,12 @@ export const Dashboard = (props: NavigationInjectedProps) => {
     props.navigation.navigate(ROUTES.AdminBarcode);
   };
 
+  const onReturn = () => {
+    getInventory();
+  };
+
   const onEdit = (item: IInventoryItem) => {
-    props.navigation.navigate(ROUTES.ItemEdit, { item });
+    props.navigation.navigate(ROUTES.ItemEdit, { item, onReturn });
   };
 
   return (

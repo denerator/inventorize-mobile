@@ -63,6 +63,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
       } else {
         await adminService.createItem(state);
       }
+      props.navigation.state.params.onReturn();
       props.navigation.navigate(ROUTES.AdminDashboard);
     } catch (err) {
       Alert.alert(err.response.data.message || 'Something went wrong');
