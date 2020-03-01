@@ -10,11 +10,12 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-// import { RNCamera } from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import { ROUTES } from '../../constants/routes';
 import { IMAGES } from '../../constants';
 import { COLORS } from '../../constants';
 import { NavigationInjectedProps } from 'react-navigation';
+import { userService } from '../user/user.service';
 
 export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const isAdmin = props.navigation.getParam('isAdmin');
@@ -32,17 +33,19 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const onWaitingNavigate = async (barcode: string) => {
     try {
       setIsLoading(true);
-      // const resp = await barcodeService.registerKit(barcode);
+      const resp = await userService.getItemInfo(barcode);
       setIsLoading(false);
-      props.navigation.navigate(isAdmin ? ROUTES.ItemEdit : ROUTES.ItemInfo, {
-        item: {
-          name: '',
-          amount: 1,
-          price: 0,
-          code: '123123131',
-          responsible: '',
-        },
-      });
+      if (resp.data) {
+        if (isAdmin) {
+          props.navigation.navigate(ROUTES.ItemEdit, {
+            code: barcode,
+          });
+        } else {
+          props.navigation.navigate(ROUTES.ItemInfo, { item: resp.data });
+        }
+      } else {
+        Alert.alert('There is no item with such barcode');
+      }
     } catch (err) {
       setIsLoading(false);
       Alert.alert('Something went wrong. Try again later');
@@ -51,8 +54,7 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
 
   const renderCamera = () => (
     <View style={styles.cameraView}>
-      <View style={{ flex: 1, backgroundColor: '#000' }}></View>
-      {/* <RNCamera
+      <RNCamera
         style={{ flex: 1 }}
         type={RNCamera.Constants.Type.back}
         flashMode={RNCamera.Constants.FlashMode.on}
@@ -62,18 +64,13 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
-        androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
         onGoogleVisionBarcodesDetected={({ barcodes }) => {
           if (barcodes.length) {
             onWaitingNavigate(barcodes[0].dataRaw);
           }
         }}
-      /> */}
+        captureAudio={false}
+      />
     </View>
   );
 
@@ -97,11 +94,9 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
             </ImageBackground>
           </View>
           <View style={styles.downControls}>
-            <TouchableOpacity onPress={() => onWaitingNavigate('12333')}>
-              <Text style={styles.description}>
-                Position barcode to fit in the square
-              </Text>
-            </TouchableOpacity>
+            <Text style={styles.description}>
+              Position barcode to fit in the square
+            </Text>
             <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
               <Text style={styles.cancel}>Cancel</Text>
             </TouchableOpacity>
@@ -161,9 +156,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   cameraView: {
-    width: 256,
-    height: 256,
-    borderRadius: 128,
+    width: '100%',
+    height: 108,
     overflow: 'hidden',
   },
   loaderContainer: {
@@ -171,6 +165,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
+    width: '100%',
+    height: 256,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 40,
   },
   approvePicture: {

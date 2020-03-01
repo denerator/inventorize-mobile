@@ -17,10 +17,21 @@ import { CTA } from '../../components/cta';
 import { IInventoryItem } from '../../typings/inventory';
 import { adminService } from '../admin/admin.service';
 
-export const EditItemScreen = (props: NavigationInjectedProps) => {
-  const item: IInventoryItem = props.navigation.getParam('item');
+const initialState = {
+  name: '',
+  amount: 1,
+  price: 0,
+  code: '',
+  responsible: '',
+};
 
-  const [state, setState] = React.useState<IInventoryItem>(item);
+export const EditItemScreen = (props: NavigationInjectedProps) => {
+  const code: string = props.navigation.getParam('code');
+
+  const [state, setState] = React.useState<IInventoryItem>({
+    ...initialState,
+    code,
+  });
 
   const goBack = () => {
     props.navigation.goBack();

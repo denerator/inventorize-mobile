@@ -5,4 +5,5 @@ export interface IInventoryItem {
   amount: number;
   responsible: string;
   code: string;
+  createdAt?: string;
 }
