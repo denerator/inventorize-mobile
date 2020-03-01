@@ -32,19 +32,19 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
 
   const onWaitingNavigate = async (barcode: string) => {
     try {
-      setIsLoading(true);
-      const resp = await userService.getItemInfo(barcode);
-      setIsLoading(false);
-      if (resp.data) {
-        if (isAdmin) {
-          props.navigation.navigate(ROUTES.ItemEdit, {
-            code: barcode,
-          });
-        } else {
-          props.navigation.navigate(ROUTES.ItemInfo, { item: resp.data });
-        }
+      if (isAdmin) {
+        props.navigation.navigate(ROUTES.ItemEdit, {
+          item: { code: barcode },
+        });
       } else {
-        Alert.alert('There is no item with such barcode');
+        setIsLoading(true);
+        const resp = await userService.getItemInfo(barcode);
+        setIsLoading(false);
+        if (resp.data) {
+          props.navigation.navigate(ROUTES.ItemInfo, { item: resp.data });
+        } else {
+          Alert.alert('There is no item with such barcode');
+        }
       }
     } catch (err) {
       setIsLoading(false);

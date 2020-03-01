@@ -26,11 +26,11 @@ const initialState = {
 };
 
 export const EditItemScreen = (props: NavigationInjectedProps) => {
-  const code: string = props.navigation.getParam('code');
+  const item: Partial<IInventoryItem> = props.navigation.getParam('item');
 
   const [state, setState] = React.useState<IInventoryItem>({
     ...initialState,
-    code,
+    ...item,
   });
 
   const goBack = () => {
