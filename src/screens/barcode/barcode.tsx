@@ -19,6 +19,7 @@ import { userService } from '../user/user.service';
 
 export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const isAdmin = props.navigation.getParam('isAdmin');
+  const onReturn = props.navigation.getParam('onReturn');
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -35,6 +36,7 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
       if (isAdmin) {
         props.navigation.navigate(ROUTES.ItemEdit, {
           item: { code: barcode },
+          onReturn,
         });
       } else {
         setIsLoading(true);

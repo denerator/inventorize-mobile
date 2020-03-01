@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NavigationInjectedProps, ScrollView } from 'react-navigation';
+import { NavigationInjectedProps } from 'react-navigation';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import { globalStyles, IMAGES, ROUTES, COLORS } from '../../constants';
 import { storageService } from '../../services/storage.service';
@@ -16,10 +18,13 @@ import { adminService } from '../admin/admin.service';
 
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const getInventory = async () => {
     try {
+      setRefreshing(true);
       const response = await adminService.getAllItems();
+      setRefreshing(false);
       setInventory(response.data);
     } catch (err) {
       console.log(err);
@@ -37,7 +42,7 @@ export const Dashboard = (props: NavigationInjectedProps) => {
   };
 
   const onAdd = () => {
-    props.navigation.navigate(ROUTES.AdminBarcode);
+    props.navigation.navigate(ROUTES.AdminBarcode, { onReturn });
   };
 
   const onReturn = () => {
@@ -48,6 +53,10 @@ export const Dashboard = (props: NavigationInjectedProps) => {
     props.navigation.navigate(ROUTES.ItemEdit, { item, onReturn });
   };
 
+  const onRefresh = () => {
+    getInventory();
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeView}>
       <View style={styles.headerContainer}>
@@ -56,7 +65,12 @@ export const Dashboard = (props: NavigationInjectedProps) => {
           <Image style={styles.logout} source={IMAGES.logout} />
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.list}>
+      <ScrollView
+        style={styles.list}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {inventory.map((item, index) => {
           const onItemClick = () => {
             onEdit(item);
@@ -96,6 +110,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   list: {
+    flex: 1,
     paddingHorizontal: '12%',
     paddingVertical: 15,
   },
