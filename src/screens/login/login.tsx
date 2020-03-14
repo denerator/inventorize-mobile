@@ -7,12 +7,11 @@ import {
   Keyboard,
   Alert,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { authService } from '../../services/auth.service';
-import { storageService } from '../../services/storage.service';
 import { ROUTES, globalStyles, COLORS } from '../../constants';
-import { tokenService } from '../../services/token.service';
 import { CTA } from '../../components/cta';
 import { BackBtn } from '../../components/back';
 import { NavigationInjectedProps } from 'react-navigation';
@@ -24,16 +23,21 @@ const loginState = {
 
 export const LoginScreen = (props: NavigationInjectedProps) => {
   const [state, setState] = React.useState(loginState);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onSubmit = async () => {
-    try {
-      const resp: any = await authService.login(state);
-      // await storageService.saveUser(resp.data.data);
-      // tokenService.setToken(resp.data.data.accessToken);
-      props.navigation.navigate(ROUTES.AdminDashboard);
-    } catch (error) {
-      Alert.alert('Wrong email or password');
-    }
+    setIsLoading(true);
+    authService.login(
+      state,
+      () => {
+        setIsLoading(false);
+        props.navigation.navigate(ROUTES.AdminDashboard);
+      },
+      (message: string) => {
+        setIsLoading(false);
+        Alert.alert(message);
+      }
+    );
   };
   const setEmail = (value: string) => {
     setState({
@@ -79,11 +83,15 @@ export const LoginScreen = (props: NavigationInjectedProps) => {
                 style={styles.input}
               />
             </View>
-            <CTA
-              onPress={onSubmit}
-              title="Submit"
-              disabled={!isSubmitDisabled()}
-            />
+            {isLoading ? (
+              <ActivityIndicator size={69} />
+            ) : (
+              <CTA
+                onPress={onSubmit}
+                title="Submit"
+                disabled={!isSubmitDisabled()}
+              />
+            )}
           </View>
           <BackBtn title="Go back" onPress={goBack} />
         </View>

@@ -12,9 +12,9 @@ import {
   RefreshControl,
 } from 'react-native';
 import { globalStyles, IMAGES, ROUTES, COLORS } from '../../constants';
-import { storageService } from '../../services/storage.service';
 import { IInventoryItem } from '../../typings/inventory';
-import { adminService } from '../admin/admin.service';
+import { userService } from '../../services/user.service';
+import { inventoryService } from '../../services/inventory.service';
 
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
@@ -23,11 +23,10 @@ export const Dashboard = (props: NavigationInjectedProps) => {
   const getInventory = async () => {
     try {
       setRefreshing(true);
-      const response = await adminService.getAllItems();
+      const response = await inventoryService.getAllItems();
       setRefreshing(false);
       setInventory(response.data);
     } catch (err) {
-      console.log(err);
       Alert.alert('Something went wrong. Try again later');
     }
   };
@@ -37,7 +36,7 @@ export const Dashboard = (props: NavigationInjectedProps) => {
   }, []);
 
   const logout = async () => {
-    // await storageService.clearUser();
+    await userService.logout();
     props.navigation.navigate(ROUTES.Intro);
   };
 

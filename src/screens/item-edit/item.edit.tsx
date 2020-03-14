@@ -15,7 +15,7 @@ import {
 import { globalStyles, COLORS, IMAGES, ROUTES } from '../../constants';
 import { CTA } from '../../components/cta';
 import { IInventoryItem } from '../../typings/inventory';
-import { adminService } from '../admin/admin.service';
+import { inventoryService } from '../../services/inventory.service';
 
 const initialState = {
   name: '',
@@ -59,9 +59,9 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
   const onSubmit = async () => {
     try {
       if (item.name) {
-        await adminService.updateItem(state);
+        await inventoryService.updateItem(state);
       } else {
-        await adminService.createItem(state);
+        await inventoryService.createItem(state);
       }
       props.navigation.state.params.onReturn();
       props.navigation.navigate(ROUTES.AdminDashboard);
@@ -69,15 +69,41 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
       Alert.alert(err.response.data.message || 'Something went wrong');
     }
   };
+
+  const onDelete = () => {
+    Alert.alert(
+      'Do you really want to delete this item?',
+      '',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: async() => {
+          if (item._id) {
+            await inventoryService.deleteItem(item._id);
+            props.navigation.state.params.onReturn();
+            props.navigation.goBack();
+          }
+        } },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeView}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView>
           <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={goBack}>
-              <Image style={styles.icon} source={IMAGES.backArrow} />
+            <View style={styles.row}>
+              <TouchableOpacity onPress={goBack}>
+                <Image style={styles.icon} source={IMAGES.backArrow} />
+              </TouchableOpacity>
+              <Text style={styles.screenTitle}>Fill Info</Text>
+            </View>
+            <TouchableOpacity onPress={onDelete}>
+              <Image source={IMAGES.trash} />
             </TouchableOpacity>
-            <Text style={styles.screenTitle}>Fill Info</Text>
           </View>
           <View style={styles.container}>
             <View>
@@ -150,6 +176,9 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     justifyContent: 'space-between',
   },
+  row: {
+    flexDirection: 'row',
+  },
   title: {
     color: '#fefdfc',
     fontSize: 20,
@@ -161,6 +190,7 @@ const styles = StyleSheet.create({
     paddingVertical: 26,
     paddingHorizontal: 30,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   screenTitle: {

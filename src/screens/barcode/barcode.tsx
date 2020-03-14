@@ -15,7 +15,7 @@ import { ROUTES } from '../../constants/routes';
 import { IMAGES } from '../../constants';
 import { COLORS } from '../../constants';
 import { NavigationInjectedProps } from 'react-navigation';
-import { userService } from '../user/user.service';
+import { inventoryService } from '../../services/inventory.service';
 
 export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const isAdmin = props.navigation.getParam('isAdmin');
@@ -40,7 +40,7 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
         });
       } else {
         setIsLoading(true);
-        const resp = await userService.getItemInfo(barcode);
+        const resp = await inventoryService.getItemInfo(barcode);
         setIsLoading(false);
         if (resp.data) {
           props.navigation.navigate(ROUTES.ItemInfo, { item: resp.data });

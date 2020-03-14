@@ -3,4 +3,5 @@ export const IMAGES = {
   introImage: require('../assets/images/intro-image.png'),
   backArrow: require('../assets/images/back-arrow.png'),
   logout: require('../assets/images/logout.png'),
+  trash: require('../assets/images/trash.png'),
 };

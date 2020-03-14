@@ -14,6 +14,10 @@ export abstract class ApiService {
     return this.request<T>(url, 'POST', body);
   };
 
+  protected delete = <T>(url: string) => {
+    return this.request<T>(url, 'DELETE');
+  };
+
   protected put = <T>(url: string, body: {}) => {
     return this.request<T>(url, 'PUT', body);
   };
