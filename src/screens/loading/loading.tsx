@@ -11,7 +11,6 @@ export const Loading = (props: NavigationInjectedProps) => {
     const fetchUser = async () => {
       const user = await storageService.getUser();
       if (user) {
-        console.log(user);
         userService.setUser(user);
         tokenService.setToken(user.access_token);
         props.navigation.navigate(ROUTES.AdminDashboard);

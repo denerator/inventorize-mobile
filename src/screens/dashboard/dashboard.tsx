@@ -15,6 +15,7 @@ import { globalStyles, IMAGES, ROUTES, COLORS } from '../../constants';
 import { IInventoryItem } from '../../typings/inventory';
 import { userService } from '../../services/user.service';
 import { inventoryService } from '../../services/inventory.service';
+import { DashboardItem } from './components/dashboard.item';
 
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
@@ -70,18 +71,9 @@ export const Dashboard = (props: NavigationInjectedProps) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {inventory.map((item, index) => {
-          const onItemClick = () => {
-            onEdit(item);
-          };
-          return (
-            <TouchableOpacity onPress={onItemClick} key={index}>
-              <View style={styles.item}>
-                <Text style={styles.itemLabel}>{item.name}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+        {inventory.map((item, index) => (
+          <DashboardItem onEdit={onEdit} item={item} key={index} />
+        ))}
       </ScrollView>
       <TouchableOpacity onPress={onAdd} style={styles.addBtn}>
         <Text style={styles.plusBtn}>+</Text>
@@ -113,35 +105,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: '12%',
     paddingVertical: 15,
   },
-  item: {
-    shadowColor: 'rgb(0, 0, 0)',
-    shadowOffset: { width: 2, height: 0 },
-    shadowRadius: 16,
-    borderColor: '#fff',
-    borderWidth: 0.5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    marginBottom: 9,
-    borderRadius: 9,
-  },
-  itemLabel: {
-    color: COLORS.barcodeCancelBtn,
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
   addBtn: {
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: COLORS.barcodeCancelBtn,
+    backgroundColor: '#80CBC4',
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     bottom: 90,
     right: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
   },
   plusBtn: {
     fontSize: 50,
