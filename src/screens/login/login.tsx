@@ -15,6 +15,7 @@ import { ROUTES, globalStyles, COLORS } from '../../constants';
 import { CTA } from '../../components/cta';
 import { BackBtn } from '../../components/back';
 import { NavigationInjectedProps } from 'react-navigation';
+import { STRINGS } from '../../constants/locales';
 
 const loginState = {
   email: '',
@@ -65,9 +66,9 @@ export const LoginScreen = (props: NavigationInjectedProps) => {
         <View style={styles.container}>
           <View></View>
           <View>
-            <Text style={styles.heading}>Log In</Text>
+            <Text style={styles.heading}>{STRINGS.login.title}</Text>
             <View>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{STRINGS.login.email}</Text>
               <TextInput
                 value={state.email}
                 onChangeText={setEmail}
@@ -75,7 +76,7 @@ export const LoginScreen = (props: NavigationInjectedProps) => {
               />
             </View>
             <View>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{STRINGS.login.password}</Text>
               <TextInput
                 secureTextEntry={true}
                 value={state.password}
@@ -88,12 +89,12 @@ export const LoginScreen = (props: NavigationInjectedProps) => {
             ) : (
               <CTA
                 onPress={onSubmit}
-                title="Submit"
+                title={STRINGS.login.submit}
                 disabled={!isSubmitDisabled()}
               />
             )}
           </View>
-          <BackBtn title="Go back" onPress={goBack} />
+          <BackBtn title={STRINGS.login.back} onPress={goBack} />
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>

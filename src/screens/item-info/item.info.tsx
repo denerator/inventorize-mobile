@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import { globalStyles, COLORS, IMAGES } from '../../constants';
+import { STRINGS } from '../../constants/locales';
 
 export const ItemInfo = (props: NavigationInjectedProps) => {
   const item = props.navigation.getParam('item');
@@ -21,30 +22,30 @@ export const ItemInfo = (props: NavigationInjectedProps) => {
         <TouchableOpacity onPress={onGoBack}>
           <Image style={styles.icon} source={IMAGES.backArrow} />
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>Info</Text>
+        <Text style={styles.screenTitle}>{STRINGS.itemInfo.title}</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.title}>{item.name}</Text>
         <View style={styles.formBlock}>
           <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Item name</Text>
+            <Text style={styles.summaryLabel}>{STRINGS.item.name}</Text>
             <Text style={styles.summaryValue}>{item.name}</Text>
           </View>
           <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Code</Text>
+            <Text style={styles.summaryLabel}>{STRINGS.item.code}</Text>
             <Text style={styles.summaryValue}>{item.code}</Text>
           </View>
           <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Item price</Text>
+            <Text style={styles.summaryLabel}>{STRINGS.item.price}</Text>
             <Text style={styles.summaryValue}>{item.price}$</Text>
           </View>
           <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>Amount</Text>
+            <Text style={styles.summaryLabel}>{STRINGS.item.amount}</Text>
             <Text style={styles.summaryValue}>{item.amount}</Text>
           </View>
           {item.createdAt ? (
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Date</Text>
+              <Text style={styles.summaryLabel}>{STRINGS.itemInfo.date}</Text>
               <Text style={styles.summaryValue}>
                 {new Date(item.createdAt).toLocaleDateString()}
               </Text>
@@ -56,7 +57,7 @@ export const ItemInfo = (props: NavigationInjectedProps) => {
               { marginBottom: 0 },
             ])}
           >
-            <Text style={styles.summaryLabel}>Responsible</Text>
+            <Text style={styles.summaryLabel}>{STRINGS.item.responsible}</Text>
             <Text style={styles.summaryValue}>{item.responsible}</Text>
           </View>
         </View>

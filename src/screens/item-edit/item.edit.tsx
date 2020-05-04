@@ -16,6 +16,7 @@ import { globalStyles, COLORS, IMAGES, ROUTES } from '../../constants';
 import { CTA } from '../../components/cta';
 import { IInventoryItem } from '../../typings/inventory';
 import { inventoryService } from '../../services/inventory.service';
+import { STRINGS } from '../../constants/locales';
 
 const initialState = {
   name: '',
@@ -66,28 +67,27 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
       props.navigation.state.params.onReturn();
       props.navigation.navigate(ROUTES.AdminDashboard);
     } catch (err) {
-      Alert.alert(err.response.data.message || 'Something went wrong');
+      Alert.alert(err.response.data.message || STRINGS.errors.default);
     }
   };
 
   const onDelete = () => {
-    Alert.alert(
-      'Do you really want to delete this item?',
-      '',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        { text: 'OK', onPress: async() => {
+    Alert.alert(STRINGS.itemEdit.deleteConfirmation, '', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async () => {
           if (item._id) {
             await inventoryService.deleteItem(item._id);
             props.navigation.state.params.onReturn();
             props.navigation.goBack();
           }
-        } },
-      ]
-    );
+        },
+      },
+    ]);
   };
 
   return (
@@ -99,7 +99,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
               <TouchableOpacity onPress={goBack}>
                 <Image style={styles.icon} source={IMAGES.backArrow} />
               </TouchableOpacity>
-              <Text style={styles.screenTitle}>Fill Info</Text>
+              <Text style={styles.screenTitle}>{STRINGS.itemEdit.title}</Text>
             </View>
             <TouchableOpacity onPress={onDelete}>
               <Image source={IMAGES.trash} />
@@ -108,7 +108,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
           <View style={styles.container}>
             <View>
               <View>
-                <Text style={styles.label}>Item name</Text>
+                <Text style={styles.label}>{STRINGS.item.name}</Text>
                 <TextInput
                   placeholder="Pencil"
                   placeholderTextColor="#5f5e5c"
@@ -118,7 +118,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 />
               </View>
               <View>
-                <Text style={styles.label}>Code</Text>
+                <Text style={styles.label}>{STRINGS.item.code}</Text>
                 <TextInput
                   placeholderTextColor="#5f5e5c"
                   value={state.code}
@@ -127,7 +127,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 />
               </View>
               <View>
-                <Text style={styles.label}>Price</Text>
+                <Text style={styles.label}>{STRINGS.item.price}</Text>
                 <TextInput
                   placeholder="100$"
                   placeholderTextColor="#5f5e5c"
@@ -137,7 +137,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 />
               </View>
               <View>
-                <Text style={styles.label}>Amount</Text>
+                <Text style={styles.label}>{STRINGS.item.amount}</Text>
                 <TextInput
                   placeholder="1"
                   placeholderTextColor="#5f5e5c"
@@ -147,7 +147,7 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
                 />
               </View>
               <View>
-                <Text style={styles.label}>Responsible</Text>
+                <Text style={styles.label}>{STRINGS.item.responsible}</Text>
                 <TextInput
                   placeholder="Teacher"
                   placeholderTextColor="#5f5e5c"
@@ -158,7 +158,12 @@ export const EditItemScreen = (props: NavigationInjectedProps) => {
               </View>
             </View>
             <View>
-              <CTA onPress={onSubmit} title={item.name ? 'Update' : 'Create'} />
+              <CTA
+                onPress={onSubmit}
+                title={
+                  item.name ? STRINGS.itemEdit.update : STRINGS.itemEdit.create
+                }
+              />
             </View>
           </View>
         </ScrollView>

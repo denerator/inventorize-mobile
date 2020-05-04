@@ -16,6 +16,7 @@ import { IInventoryItem } from '../../typings/inventory';
 import { userService } from '../../services/user.service';
 import { inventoryService } from '../../services/inventory.service';
 import { DashboardItem } from './components/dashboard.item';
+import { STRINGS } from '../../constants/locales';
 
 export const Dashboard = (props: NavigationInjectedProps) => {
   const [inventory, setInventory] = React.useState<IInventoryItem[]>([]);
@@ -28,7 +29,7 @@ export const Dashboard = (props: NavigationInjectedProps) => {
       setRefreshing(false);
       setInventory(response.data);
     } catch (err) {
-      Alert.alert('Something went wrong. Try again later');
+      Alert.alert(STRINGS.errors.default);
     }
   };
 
@@ -60,7 +61,7 @@ export const Dashboard = (props: NavigationInjectedProps) => {
   return (
     <SafeAreaView style={globalStyles.safeView}>
       <View style={styles.headerContainer}>
-        <Text style={styles.screenTitle}>Admin Dashboard</Text>
+        <Text style={styles.screenTitle}>{STRINGS.dashboard.title}</Text>
         <TouchableOpacity onPress={logout}>
           <Image style={styles.logout} source={IMAGES.logout} />
         </TouchableOpacity>

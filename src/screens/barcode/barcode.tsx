@@ -16,6 +16,7 @@ import { IMAGES } from '../../constants';
 import { COLORS } from '../../constants';
 import { NavigationInjectedProps } from 'react-navigation';
 import { inventoryService } from '../../services/inventory.service';
+import { STRINGS } from '../../constants/locales';
 
 export const BarcodeScreen = (props: NavigationInjectedProps) => {
   const isAdmin = props.navigation.getParam('isAdmin');
@@ -45,12 +46,12 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
         if (resp.data) {
           props.navigation.navigate(ROUTES.ItemInfo, { item: resp.data });
         } else {
-          Alert.alert('There is no item with such barcode');
+          Alert.alert(STRINGS.barcode.noItemError);
         }
       }
     } catch (err) {
       setIsLoading(false);
-      Alert.alert('Something went wrong. Try again later');
+      Alert.alert(STRINGS.errors.default);
     }
   };
 
@@ -61,8 +62,8 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
         type={RNCamera.Constants.Type.back}
         flashMode={RNCamera.Constants.FlashMode.on}
         androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
+          title: STRINGS.permissions.camera.title,
+          message: STRINGS.permissions.camera.description,
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}
@@ -96,11 +97,9 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
             </ImageBackground>
           </View>
           <View style={styles.downControls}>
-            <Text style={styles.description}>
-              Position barcode to fit in the square
-            </Text>
+            <Text style={styles.description}>{STRINGS.barcode.position}</Text>
             <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
-              <Text style={styles.cancel}>Cancel</Text>
+              <Text style={styles.cancel}>{STRINGS.barcode.cancel}</Text>
             </TouchableOpacity>
           </View>
         </View>

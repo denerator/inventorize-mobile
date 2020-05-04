@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet, Image } from 'react-native';
 import { globalStyles, COLORS, ROUTES, IMAGES } from '../../constants';
 import { CTA } from '../../components/cta';
 import { NavigationInjectedProps } from 'react-navigation';
+import { STRINGS } from '../../constants/locales';
 
 export const Intro = (props: NavigationInjectedProps) => {
   const onAdmin = () => {
@@ -17,14 +18,14 @@ export const Intro = (props: NavigationInjectedProps) => {
       <View style={styles.container}>
         <Image style={styles.image} source={IMAGES.introImage} />
         <View>
-          <Text style={styles.title}>INVENTORIZE</Text>
+          <Text style={styles.title}>{STRINGS.intro.appName}</Text>
           <View style={styles.descriptionContainer}>
-            <Text style={styles.subTitle}>Easily track your inventory</Text>
+            <Text style={styles.subTitle}>{STRINGS.intro.description}</Text>
           </View>
         </View>
         <View>
-          <CTA title="User" onPress={onUser} />
-          <CTA title="Admin" onPress={onAdmin} />
+          <CTA title={STRINGS.intro.user} onPress={onUser} />
+          <CTA title={STRINGS.intro.admin} onPress={onAdmin} />
         </View>
       </View>
     </SafeAreaView>
