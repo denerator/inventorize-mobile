@@ -68,9 +68,10 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
           buttonNegative: 'Cancel',
         }}
         onGoogleVisionBarcodesDetected={({ barcodes }) => {
-          if (barcodes.length) {
+          if (barcodes.length && !isLoading && props.navigation.isFocused()) {
             onWaitingNavigate(barcodes[0].dataRaw);
           }
+          return null;
         }}
         captureAudio={false}
       />
