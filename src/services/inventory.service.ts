@@ -15,11 +15,15 @@ class InventoryService extends ApiService {
   }
 
   public async getItemInfo(code: string) {
-    return await this.get<IInventoryItem>(`inventory/${code}`);
+    return await this.get<IInventoryItem>(`inventory/code/${code}`);
   }
 
   public async deleteItem(id: string) {
     return await this.delete<IInventoryItem>(`inventory/${id}`);
+  }
+
+  public async generateReport() {
+    return await this.get(`inventory/mail-report`);
   }
 }
 

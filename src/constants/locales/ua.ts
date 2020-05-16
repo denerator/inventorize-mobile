@@ -12,6 +12,8 @@ export const UA = {
   },
   dashboard: {
     title: 'Панель адміністратора',
+    reportError: 'Помилка під час створення звіту. Спробуйте ще раз пізніше ',
+    reportSuccess: 'Звіт надісланий на ваш електронний лист',
   },
   itemEdit: {
     deleteConfirmation: 'Ви дійсно хочете видалити цей елемент?',

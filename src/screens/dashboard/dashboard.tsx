@@ -58,10 +58,24 @@ export const Dashboard = (props: NavigationInjectedProps) => {
     getInventory();
   };
 
+  const onReport = async () => {
+    try {
+      setRefreshing(true);
+      await inventoryService.generateReport();
+      setRefreshing(false);
+      Alert.alert(STRINGS.dashboard.reportSuccess);
+    } catch (err) {
+      Alert.alert(STRINGS.dashboard.reportError);
+    }
+  };
+
   return (
     <SafeAreaView style={globalStyles.safeView}>
       <View style={styles.headerContainer}>
         <Text style={styles.screenTitle}>{STRINGS.dashboard.title}</Text>
+        <TouchableOpacity onPress={onReport}>
+          <Image style={styles.logout} source={IMAGES.report} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={logout}>
           <Image style={styles.logout} source={IMAGES.logout} />
         </TouchableOpacity>

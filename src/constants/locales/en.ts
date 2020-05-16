@@ -12,6 +12,8 @@ export const EN = {
   },
   dashboard: {
     title: 'Admin Dashboard',
+    reportError: 'Error while generating report. Try again later',
+    reportSuccess: 'Report was sent to your email',
   },
   itemEdit: {
     deleteConfirmation: 'Do you really want to delete this item?',
