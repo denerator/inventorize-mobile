@@ -69,7 +69,9 @@ export const BarcodeScreen = (props: NavigationInjectedProps) => {
         }}
         onGoogleVisionBarcodesDetected={({ barcodes }) => {
           if (barcodes.length && !isLoading && props.navigation.isFocused()) {
-            onWaitingNavigate(barcodes[0].dataRaw);
+            if (barcodes[0].format !== 'None') {
+              onWaitingNavigate(barcodes[0].dataRaw);
+            }
           }
           return null;
         }}
